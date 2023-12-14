@@ -7,7 +7,7 @@ class Check:
 
     def __init__(self):
         self.email = ""
-        
+
     def print_linked(self):
         return f"{self.email} = Linked"
 
@@ -15,10 +15,6 @@ class Check:
         return f"{self.email} = Unlinked"
 
     def twitter(self):
-         def twitter(self):
-        print("==================")
-        print("[+] Twitter [+]")
-        print("")
         r = requests.Session()
         url = "https://api.twitter.com/i/users/email_available.json?email=" + self.email
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.182 Safari/537.36"
@@ -30,17 +26,12 @@ class Check:
         print(text)
         print('')
         if text.find("'valid': False") == True:
-            self.PrintT()
+            self.print_linked()
         else:
-            self.PrintF()
+            self.print_unlinked()
         self.instagram()
-        pass
 
     def instagram(self):
-        def instagram(self):
-        print("==================")
-        print("[+] Instagram [+]")
-        print("")
         r = requests.Session()
         url = "https://www.instagram.com/accounts/account_recovery_send_ajax/"
         user_agent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/81.0.4044.122 Safari/537.36"
@@ -51,21 +42,16 @@ class Check:
         print(req.text)
         print('')
         if req.text.find("We sent an self.email to") >= 0:
-            self.PrintT()
+            self.print_linked()
         elif req.text.find("password") >= 0:
-            self.PrintT()
+            self.print_linked()
         elif req.text.find("sent") >= 0:
-            self.PrintT()
+            self.print_linked()
         else:
-            self.PrintF()
+            self.print_unlinked()
         self.snapchat()
-        pass
 
     def snapchat(self):
-        def snapchat(self):
-        print("==================")
-        print("[+] Snapchat [+]")
-        print("")
         url = "https://bitmoji.api.snapchat.com/api/user/find"
         r = requests.Session()
         r.headers = {
@@ -83,7 +69,6 @@ class Check:
             file.close()
         else:
             print(f"{self.email} = is not linked to an account" + "\n")
-        pass
 
     def run_checks(self):
         self.twitter()
@@ -97,19 +82,20 @@ def index():
 @app.route('/check', methods=['POST'])
 def check():
     email = request.json.get('email', '')
-    
+
     # Perform social media checks
     checker = Check()
     checker.email = email
     checker.run_checks()
-    
+
     result = {
         'twitter': checker.print_linked() if checker.twitter() else checker.print_unlinked(),
         'instagram': checker.print_linked() if checker.instagram() else checker.print_unlinked(),
         'snapchat': checker.print_linked() if checker.snapchat() else checker.print_unlinked()
     }
-    
+
     return jsonify(result)
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+
