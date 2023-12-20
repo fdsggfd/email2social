@@ -37,13 +37,17 @@
 
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
-                if (xhr.readyState == 4 && xhr.status == 200) {
-                    var result = JSON.parse(xhr.responseText);
-                    document.getElementById('output').innerHTML = `
-                        <p>Twitter: ${result.twitter}</p>
-                        <p>Instagram: ${result.instagram}</p>
-                        <p>Snapchat: ${result.snapchat}</p>
-                    `;
+                if (xhr.readyState == 4) {
+                    if (xhr.status == 200) {
+                        var result = JSON.parse(xhr.responseText);
+                        document.getElementById('output').innerHTML = `
+                            <p>Twitter: ${result.twitter}</p>
+                            <p>Instagram: ${result.instagram}</p>
+                            <p>Snapchat: ${result.snapchat}</p>
+                        `;
+                    } else {
+                        document.getElementById('output').innerHTML = "Error: Unable to fetch results.";
+                    }
                 }
             };
 
