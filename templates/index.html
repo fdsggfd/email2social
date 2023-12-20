@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -9,18 +10,20 @@
         body {
             font-family: Arial, sans-serif;
             margin: 20px;
-            color: white; /* Set text color to white */
+            color: white; 
         }
+
         #output {
             margin-top: 20px;
-            color: white; /* Set text color to white */
+            color: white; 
         }
-        /* Add this style for button text color */
+
         button {
             color: white;
         }
     </style>
 </head>
+
 <body>
     <h1>Social Media Checker</h1>
     <form id="checkerForm">
@@ -34,27 +37,32 @@
     <script>
         function checkSocialMedia() {
             var email = document.getElementById('email').value;
+            var outputDiv = document.getElementById('output');
+
+            // Display loading message
+            outputDiv.innerHTML = "Loading... Please wait.";
 
             var xhr = new XMLHttpRequest();
             xhr.onreadystatechange = function() {
                 if (xhr.readyState == 4) {
                     if (xhr.status == 200) {
                         var result = JSON.parse(xhr.responseText);
-                        document.getElementById('output').innerHTML = `
+                        outputDiv.innerHTML = `
                             <p>Twitter: ${result.twitter}</p>
                             <p>Instagram: ${result.instagram}</p>
                             <p>Snapchat: ${result.snapchat}</p>
                         `;
                     } else {
-                        document.getElementById('output').innerHTML = "Error: Unable to fetch results.";
+                        outputDiv.innerHTML = "Error: Unable to fetch results.";
                     }
                 }
             };
 
             xhr.open('POST', '/check', true);
             xhr.setRequestHeader('Content-Type', 'application/json');
-            xhr.send(JSON.stringify({email: email}));
+            xhr.send(JSON.stringify({ email: email }));
         }
     </script>
 </body>
+
 </html>
